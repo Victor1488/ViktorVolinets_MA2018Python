@@ -18,16 +18,20 @@ restart = 5
 #automatical restarting of the game
 def game_restart():
     global restart
+    
     restart=restart-1
     print "New game in", restart
     if restart == 1:
-        restart =5
+        restart = 5
         new_game()
         timer.stop()
+        
 
 #choice number range
 def new_game():
     if num_range == 100:
+        global num_guess
+        num_guess = 7
         print
         print "A new game has started with a range from 0 to 100"
         print "You have", num_guess, "guesses remaining"
@@ -37,6 +41,8 @@ def new_game():
         #print comp
         
     if num_range == 1000:
+        num_guess
+        num_guess = 10
         print
         print "A new game has started with a range from 0 to 1000"
         print "You have", num_guess, "guesses remaining"
