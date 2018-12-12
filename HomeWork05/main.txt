@@ -1,0 +1,84 @@
+# implementation of card game - Memory
+
+import simplegui
+import random
+num1 = [1,2,3,4,5,6,7,8,1,2,3,4,5,6,7,8]
+#num2 = [1,2,3,4,5,6,7,8]
+clicked_cards_position = [];
+saved = []
+yscore = 75
+
+WIDTH = 50
+HEIGHT = 100
+Turns = 1
+color = "Green"
+
+# helper function to initialize globals
+def new_game():
+    global num1,num2, clicked_cards_position,saved,Turns
+    rnum1 = random.shuffle(num1)
+    clicked_cards_position = []
+    saved = []
+    current_card = []
+    Turns = 0
+    print num1 
+     
+# define event handlers
+def mouseclick(pos):   
+    global current_card,saved,clicked_cards_position, Turns
+    if len(clicked_cards_position) == 2 :
+        clicked_cards_position = [];
+        current_card = None;
+        Turns = Turns + 1
+    else:
+        Turns = Turns + 1
+        current_card = pos[0]/50;
+        clicked_cards_position.append(current_card);
+        
+        if len(clicked_cards_position) == 2 :
+            if (clicked_cards_position[0] == clicked_cards_position[1]):
+                del clicked_cards_position[1];
+
+
+        if len(clicked_cards_position) == 2 :
+            if num1[clicked_cards_position[0]] ==  num1[clicked_cards_position[1]]:
+                saved.append(num1[clicked_cards_position[0]]);
+    
+    
+    
+                        
+# cards are logically 50x100 pixels in size    
+def draw(canvas):
+    global num1,yscore,current_card,saved,clicked_cards_position
+    for i in range(0,16):
+        if num1[i] in saved:
+            canvas.draw_text(str(num1[i]),[50*i+10,yscore],60,"White")        
+            continue;
+        if len(clicked_cards_position) > 0 :
+            if i == clicked_cards_position[0]:
+                canvas.draw_text(str(num1[i]),[50*i+10,yscore],60,"White")        
+                continue;            
+        if 'current_card' in globals():
+            if i == current_card:
+                continue;            
+        canvas.draw_polygon([(50*i,0), (50*(i+1), 0), (50*(i+1), 100),(50*i,100)],2,"Red","Green")
+    
+    if 'current_card' in globals() and current_card is not None:   
+        canvas.draw_text(str(num1[current_card]),[50*current_card+10,yscore],60,"White")        
+
+# create frame and add a button and labels
+Turns
+frame = simplegui.create_frame("Memory", 800, 100)
+frame.add_button("Reset", new_game)
+label = frame.add_label(str(Turns))
+
+# register event handlers
+frame.set_mouseclick_handler(mouseclick)
+frame.set_draw_handler(draw)
+
+# get things rolling
+new_game()
+frame.start()
+
+
+# Always remember to review the grading rubric
